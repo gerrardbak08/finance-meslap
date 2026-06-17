@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>2026년 재정보고서 · 사랑과평안의교회</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.min.css" />
+<style>
+:root{
+  --bg:#f2f4f6;--surface:#ffffff;
+  --navy:#1b3a8b;--navy-dark:#0a1d50;--navy-soft:#2f4ea6;--brand:#2563eb;
+  --text:#191f28;--text-sub:#6b7684;--text-mute:#8b95a1;
+  --border:#e8ebed;--line:#f1f3f5;
+  --pos:#0f7b3f;--neg:#d83a3a;--track:#e9edf3;
+  --pad:16px;--gap:12px;--radius:14px;--radius-sm:10px;--navh:64px;
+}
+
+/* ── keyframes ──────────────────── */
+@keyframes fadeUp   {from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes heroIn   {from{opacity:0;transform:scale(.97);}to{opacity:1;transform:scale(1);}}
+@keyframes growBar  {from{width:0%;}}
+@keyframes blurIn   {from{opacity:0;filter:blur(12px);}to{opacity:1;filter:blur(0);}}
+@keyframes navBar   {from{transform:translateX(-50%) scaleX(0);}to{transform:translateX(-50%) scaleX(1);}}
+@keyframes lgPulse  {0%,100%{opacity:.3;transform:translateY(0);}50%{opacity:.75;transform:translateY(-5px);}}
+@keyframes ripple   {to{transform:scale(5);opacity:0;}}
+@keyframes lgExit   {to{opacity:0;transform:translateY(-18px);}}
+@keyframes toastIn  {from{opacity:0;transform:translateX(-50%) translateY(8px);}to{opacity:1;transform:translateX(-50%) translateY(0);}}
+@keyframes shim     {0%{background-position:200% 0;}100%{background-position:-200% 0;}}
+
+/* ── base ───────────────────────── */
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;color:var(--text);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+.num{font-variant-numeric:tabular-nums;font-feature-settings:"tnum";}
+
+/* ── scroll progress ────────────── */
+#progress{position:fixed;top:0;left:0;height:2.5px;width:0;background:var(--brand);z-index:190;transition:width .08s linear;pointer-events:none;}
+
+/* ── landing ────────────────────── */
+#landing{
+  position:fixed;inset:0;z-index:200;
+  background:linear-gradient(155deg,var(--navy) 0%,var(--navy-dark) 100%);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;overflow:hidden;
+}
+#landing::before{content:'';position:absolute;top:-70px;right:-50px;width:280px;height:280px;border-radius:50%;background:rgba(255,255,255,.05);pointer-events:none;}
+#landing::after{content:'';position:absolute;bottom:60px;left:-70px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;}
+#landing.exit{animation:lgExit .45s cubic-bezier(.4,0,.6,1) both;}
+.lg-body{text-align:center;color:#fff;padding:0 36px;position:relative;z-index:1;}
+.lg-org{font-size:13px;color:#c4d0ee;font-weight:700;letter-spacing:.04em;margin-bottom:22px;animation:blurIn .6s ease .1s both;}
+.lg-year{font-size:18px;color:#aebbe2;font-weight:700;animation:fadeUp .5s cubic-bezier(.22,.68,0,1.2) .28s both;}
+.lg-title{font-size:46px;font-weight:900;letter-spacing:-.03em;line-height:1.03;margin-top:6px;animation:fadeUp .55s cubic-bezier(.22,.68,0,1.2) .38s both;}
+.lg-date{font-size:13px;color:#7a9ac8;margin-top:18px;font-weight:500;animation:fadeUp .5s cubic-bezier(.22,.68,0,1.2) .52s both;}
+.lg-hint{position:absolute;bottom:calc(env(safe-area-inset-bottom,0px) + 36px);display:flex;flex-direction:column;align-items:center;gap:9px;animation:fadeUp .5s ease .72s both;z-index:1;}
+.lg-hint-dot{width:7px;height:7px;border-radius:50%;background:#8fa4cc;animation:lgPulse 2s ease-in-out 1s infinite;}
+.lg-hint-txt{font-size:11.5px;color:#6a82b0;font-weight:600;letter-spacing:.04em;}
+
+/* ── app shell ──────────────────── */
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);position:relative;}
+.scroll{padding:4px var(--pad) calc(var(--navh) + 28px);}
+
+/* ── header ─────────────────────── */
+header{position:sticky;top:0;z-index:20;background:var(--bg);padding:14px var(--pad) 8px;}
+header .org{font-size:13px;color:var(--text-mute);font-weight:600;}
+header h1{font-size:20px;font-weight:800;letter-spacing:-.02em;margin-top:2px;}
+header .asof{font-size:12px;color:var(--text-mute);margin-top:3px;}
+
+/* ── segment ────────────────────── */
+.seg{position:relative;display:flex;gap:0;background:var(--track);border-radius:12px;padding:4px;margin-top:12px;overflow:hidden;}
+.seg-pill{position:absolute;top:4px;left:4px;height:calc(100% - 8px);background:var(--surface);border-radius:9px;box-shadow:0 1px 3px rgba(0,0,0,.1);transition:left .28s cubic-bezier(.2,.7,.3,1),width .28s cubic-bezier(.2,.7,.3,1);pointer-events:none;z-index:0;}
+.seg button{position:relative;z-index:1;flex:1;border:none;background:none;font-family:inherit;font-size:13px;font-weight:700;color:var(--text-sub);padding:9px 0;border-radius:9px;cursor:pointer;min-height:40px;transition:color .2s;overflow:hidden;}
+.seg button.on{color:var(--brand);}
+
+/* ── ripple ─────────────────────── */
+.ripple-ink{position:absolute;border-radius:50%;transform:scale(0);animation:ripple .55s ease-out;pointer-events:none;}
+.seg .ripple-ink{background:rgba(37,99,235,.12);}
+nav .ripple-ink{background:rgba(37,99,235,.14);}
+
+/* ── cards ──────────────────────── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);}
+.card+.card{margin-top:var(--gap);}
+.pad{padding:var(--pad);}
+
+/* ── animations (card) ──────────── */
+.anim-hero{animation:heroIn .45s cubic-bezier(.22,.68,0,1.2) both;}
+.anim{animation:fadeUp .38s cubic-bezier(.22,.68,0,1.2) both;}
+.d1{animation-delay:.06s;}.d2{animation-delay:.12s;}.d3{animation-delay:.18s;}
+.d4{animation-delay:.24s;}.d5{animation-delay:.30s;}
+
+/* ── hero ───────────────────────── */
+.hero{background:linear-gradient(145deg,var(--navy) 0%,var(--navy-dark) 100%);border-radius:var(--radius);padding:20px var(--pad);color:#fff;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(circle at 85% 15%,rgba(255,255,255,.08) 0%,transparent 55%);pointer-events:none;}
+.hero::after{content:'';position:absolute;bottom:-30px;right:-20px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none;}
+.hero .label{font-size:13px;color:#c4d0ee;font-weight:600;position:relative;}
+.hero .big{font-size:38px;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin-top:4px;position:relative;}
+.hero .sub{font-size:14px;color:#aebbe2;margin-top:2px;position:relative;}
+.hero .row{display:flex;gap:10px;margin-top:16px;position:relative;}
+.hero .mini{flex:1;background:rgba(255,255,255,.1);border-radius:var(--radius-sm);padding:12px 14px;backdrop-filter:blur(4px);}
+.hero .mini .t{font-size:12px;color:#c4d0ee;font-weight:600;}
+.hero .mini .v{font-size:19px;font-weight:800;margin-top:3px;}
+
+/* ── rate card ──────────────────── */
+.rate-top{display:flex;justify-content:space-between;align-items:flex-start;}
+.rate-top .t{font-size:15px;font-weight:700;}
+.rate-top .t span{display:block;font-size:12px;color:var(--text-mute);font-weight:500;margin-top:1px;}
+.rate-top .pct{font-size:30px;font-weight:800;color:var(--brand);letter-spacing:-.02em;}
+.bar{height:10px;background:var(--track);border-radius:6px;overflow:hidden;margin:14px 0 10px;}
+.bar>span{display:block;height:100%;background:linear-gradient(90deg,#60a5fa,var(--brand));border-radius:6px;animation:growBar .85s cubic-bezier(.22,.68,0,1.2) both;animation-delay:.22s;}
+.rate-foot{font-size:12.5px;color:var(--text-sub);}
+
+/* ── list ───────────────────────── */
+.sec{font-size:14px;font-weight:800;color:var(--text-sub);margin:22px 4px 10px;}
+.km{padding:2px var(--pad);}
+.km .r{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 0;border-top:1px solid var(--line);}
+.km .r:first-child{border-top:none;}
+.km .r .name{font-size:14px;font-weight:600;flex:1;min-width:0;}
+.km .r .right{text-align:right;flex-shrink:0;}
+.km .r .right .v{font-size:17px;font-weight:800;letter-spacing:-.01em;}
+.km .r .right .v.blue{color:var(--brand);}
+.km .r .right .v.green{color:var(--pos);}
+.km .r .right .note{font-size:11.5px;color:var(--text-mute);margin-top:1px;}
+
+/* ── table ──────────────────────── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+thead th{font-size:10.5px;color:var(--text-mute);font-weight:700;text-align:right;padding:9px 5px;border-bottom:1px solid var(--border);white-space:nowrap;}
+thead th.l{text-align:left;padding-left:0;position:sticky;left:0;background:var(--surface);z-index:2;box-shadow:2px 0 0 var(--border);}
+tbody td{padding:9px 5px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;}
+tbody td.l{text-align:left;white-space:nowrap;padding-left:0;position:sticky;left:0;background:var(--surface);z-index:1;box-shadow:2px 0 0 var(--line);}
+tbody tr:last-child td{border-bottom:none;}
+tbody td.name{font-weight:600;color:var(--text);}
+tbody td.sub{padding-left:10px;color:var(--text-sub);font-weight:500;}
+tbody td.sub::before{content:"ㄴ ";color:var(--text-mute);font-size:10px;}
+tr.total td{font-weight:800;border-top:2px solid var(--border);background:#fafbfc;}
+tr.total td.l{background:#fafbfc;}
+td.neg{color:var(--neg);}td.pos{color:var(--pos);}td.zero{color:var(--text-mute);}
+td.grouphd{color:var(--brand);font-size:11px;font-weight:800;padding-top:10px;padding-bottom:3px;}
+td.grouphd.debt{color:var(--neg);}
+
+/* ── misc ───────────────────────── */
+.cap{font-size:11.5px;color:var(--text-mute);margin-top:8px;}
+.grp{font-size:12px;font-weight:800;color:var(--brand);margin:16px 4px 6px;}
+.info{display:flex;gap:8px;align-items:flex-start;background:#eef3ff;border:1px solid #d6e0ff;border-radius:var(--radius-sm);padding:11px 13px;font-size:13px;color:#33509c;line-height:1.45;margin-bottom:12px;}
+.info svg{flex:0 0 auto;margin-top:1px;}
+.totbar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px var(--pad);}
+.totbar .t{font-size:13px;color:var(--text-sub);font-weight:700;flex:1;min-width:0;}
+.totbar .v{text-align:right;flex-shrink:0;}
+.totbar .v .a{font-size:21px;font-weight:800;letter-spacing:-.02em;}
+.totbar .v .b{font-size:12px;color:var(--text-mute);margin-top:1px;}
+.pill{display:inline-block;font-size:11px;font-weight:700;color:var(--pos);background:#e7f4ec;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;}
+.badge-q2{display:inline-block;font-size:11px;font-weight:700;background:#fff3e8;color:#b45309;border-radius:6px;padding:2px 7px;margin-left:6px;vertical-align:middle;}
+
+/* ── nav ────────────────────────── */
+nav{position:fixed;left:50%;transform:translateX(-50%);bottom:0;width:100%;max-width:480px;height:var(--navh);background:var(--surface);border-top:1px solid var(--border);display:flex;padding-bottom:env(safe-area-inset-bottom);}
+nav button{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;background:none;border:none;cursor:pointer;color:var(--text-mute);font-size:11px;font-weight:600;font-family:inherit;min-height:52px;position:relative;transition:color .2s;overflow:hidden;}
+nav button svg{width:22px;height:22px;transition:transform .25s cubic-bezier(.22,.68,0,1.2);}
+nav button.on{color:var(--brand);}
+nav button.on svg{transform:scale(1.12);}
+nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20px;height:2.5px;background:var(--brand);border-radius:0 0 3px 3px;animation:navBar .3s cubic-bezier(.22,.68,0,1.2) both;}
+
+/* ── toast ──────────────────────── */
+#toast{position:fixed;left:50%;bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%) translateY(8px);background:rgba(25,31,40,.92);color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;z-index:150;white-space:nowrap;transition:opacity .25s,transform .25s;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+
+/* ── views ──────────────────────── */
+@keyframes slideView{from{opacity:0;transform:translateX(12px);}to{opacity:1;transform:translateX(0);}}
+.view{display:none;}
+.view.on{display:block;animation:slideView .28s cubic-bezier(.2,.7,.3,1) both;}
+
+/* ── app dissolve (랜딩 크로스페이드) ── */
+.app{opacity:0;transition:opacity .38s ease .08s;}
+.app.visible{opacity:1;}
+
+/* ── asof pulse dot ─────────────── */
+.asof-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--pos);margin-right:5px;vertical-align:middle;position:relative;}
+.asof-dot::after{content:'';position:absolute;inset:0;border-radius:50%;background:var(--pos);animation:lgPulse2 2s ease-out infinite;}
+@keyframes lgPulse2{0%{transform:scale(1);opacity:.6;}100%{transform:scale(2.4);opacity:0;}}
+
+/* ── small screens ──────────────── */
+@media(max-width:375px){
+  :root{--pad:13px;--radius:12px;}
+  header h1{font-size:18px;}
+  .hero .big{font-size:32px;}
+  .hero .mini .v{font-size:17px;}
+  .lg-title{font-size:38px;}
+  table{font-size:11.5px;}
+  thead th,tbody td{padding:8px 4px;}
+}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important;}}
+</style>
+</head>
+<body>
+
+<!-- ★ 랜딩 -->
+<div id="landing" tabindex="0" role="button" aria-label="화면을 터치하면 재정보고서가 시작됩니다">
+  <div class="lg-body">
+    <div class="lg-org">사랑과평안의교회</div>
+    <div class="lg-year">2026년</div>
+    <h2 class="lg-title">상반기<br>재정보고서</h2>
+    <div class="lg-date">기준일 2026.06.01</div>
+  </div>
+  <div class="lg-hint">
+    <div class="lg-hint-dot"></div>
+    <span class="lg-hint-txt">화면을 터치하면 시작</span>
+  </div>
+</div>
+
+<!-- ★ 스크롤 진행 -->
+<div id="progress"></div>
+
+<!-- ★ 토스트 -->
+<div id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+
+<div class="app">
+  <header>
+    <div class="org">사랑과평안의교회</div>
+    <h1 id="title">2026년 상반기 재정보고서</h1>
+    <div class="asof" id="asof"><span class="asof-dot"></span>기준일 2026.06.01 · 상반기 누적</div>
+    <div class="seg" id="seg" role="tablist" aria-label="분기 선택">
+      <div class="seg-pill" id="seg-pill"></div>
+      <button class="on" data-q="half" role="tab" aria-selected="true">상반기</button>
+      <button data-q="q1" role="tab" aria-selected="false">1분기</button>
+      <button data-q="q2" role="tab" aria-selected="false">2분기</button>
+    </div>
+  </header>
+
+  <div class="scroll">
+    <section class="view on" id="v-overview"></section>
+    <section class="view" id="v-asset"></section>
+    <section class="view" id="v-offering"></section>
+    <section class="view" id="v-loan"></section>
+    <section class="view" id="v-raw"></section>
+  </div>
+
+  <nav id="nav">
+    <button class="on" data-v="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="11" width="3" height="6"/><rect x="12" y="7" width="3" height="10"/><rect x="17" y="13" width="3" height="4"/></svg>개요</button>
+    <button data-v="asset"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 21V10l8-6 8 6v11M9 21v-6h6v6"/></svg>자산</button>
+    <button data-v="offering"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v10M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/></svg>헌금</button>
+    <button data-v="loan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h13l-2-2M21 17H8l2 2"/></svg>차용금</button>
+    <button data-v="raw"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 3v3h6V3M9 11h6M9 15h4"/></svg>원본</button>
+  </nav>
+</div>
+
+<script>
+/* ===== 데이터 ===== */
+var D = {
+  /* 상반기: 1+2분기 누적 */
+  half:{
+    label:"상반기", asof:"기준일 2026.06.01 · 상반기 누적",
+    carryName:"전년도 이월금", carryLabel:"전년 이월",
+    bal:151793323, incomeTotal:328485901, expense:176692578,
+    carry:121295307, newIncome:207190594, rate:53.8, carryPct:36.9,
+    summary:[
+      ["일반헌금",0,172831664,158046684,14784980],
+      ["목적헌금",117367230,33171930,18510284,132028876],
+      ["NGC 예배",1587890,1187000,135610,2639280],
+      ["특별적립금",2340187,0,0,2340187]
+    ],
+    general:[
+      ["일반헌금",0,172831664,158046684,14784980],
+      ["└주일헌금 등",-13926148,172763020,158046684,790188],
+      ["└예산외(행사통장)",13926148,68644,0,13994792]
+    ],
+    purpose:[
+      ["장학헌금",2950000,500000,0,3450000],
+      ["건축헌금",80690902,18640300,0,99331202],
+      ["미자립교회후원금",4473310,500000,0,4973310],
+      ["선교출판헌금",798175,0,0,798175],
+      ["출판사 후원금",1030000,0,0,1030000],
+      ["선교헌금",16226779,2146740,8483684,9889835],
+      ["└개인후원헌금",775600,0,0,775600],
+      ["└카렌장학금",6547840,300000,0,6847840],
+      ["└선교헌금",8903339,1846740,8483684,2266395],
+      ["기타목적헌금",11198064,11384890,10026600,12556354],
+      ["합계",117367230,33171930,18510284,132028876]
+    ],
+    ngc:[["NGC 예배",1587890,1187000,135610,2639280]],
+    reserve:[
+      ["특별 장학기금",0,0,0,0],["건축 적립금",2340187,0,0,2340187],
+      ["퇴직 적립금",0,0,0,0],["안식년 적립금",0,0,0,0],["합계",2340187,0,0,2340187]
+    ],
+    mov:{general:146813856,ngc:2639280,reserve:2340187,supplies:14817072},
+    assetTotal:4566610395,assetPct:"100.64%",assetEstimated:true,
+    assetNote:"통장잔액은 상반기 결산 반영 · 부동산·부채·사무용품은 연간 고정 · 합계는 산출값",
+    loanNote:true
+  },
+  /* 1분기 단독 */
+  q1:{
+    label:"1분기", asof:"기준일 2026.03.01",
+    carryName:"전년도 이월금", carryLabel:"전년 이월",
+    bal:136396568, incomeTotal:237011271, expense:100614703,
+    carry:121295307, newIncome:115715964, rate:42.5, carryPct:51.2,
+    summary:[
+      ["일반헌금",0,91300954,84115093,7185861],
+      ["목적헌금",117367230,23838010,16364000,124841240],
+      ["NGC 예배",1587890,577000,135610,2029280],
+      ["특별적립금",2340187,0,0,2340187]
+    ],
+    general:[["일반헌금",0,91300954,84115093,7185861]],
+    purpose:[
+      ["장학헌금",2950000,300000,0,3250000],
+      ["건축헌금",80690902,11973300,0,92664202],
+      ["미자립교회후원금",4473310,300000,0,4773310],
+      ["선교출판헌금",798175,0,0,798175],
+      ["출판사 후원금",1030000,0,0,1030000],
+      ["선교헌금",16226779,1160000,6337400,11049379],
+      ["└개인후원금",775600,0,0,775600],
+      ["└카렌장학금",6547840,150000,0,6697840],
+      ["└선교헌금",8903339,1010000,6337400,3575939],
+      ["기타목적헌금",11198064,10104710,10026600,11276174],
+      ["합계",117367230,23838010,16364000,124841240]
+    ],
+    ngc:[["NGC 예배",1587890,577000,135610,2029280]],
+    reserve:[
+      ["특별 장학기금",0,0,0,0],["건축 적립금",2340187,0,0,2340187],
+      ["퇴직 적립금",0,0,0,0],["안식년 적립금",0,0,0,0],["합계",2340187,0,0,2340187]
+    ],
+    mov:{general:132027101,ngc:2029280,reserve:2340187,supplies:14817072},
+    assetTotal:4551213640,assetPct:"100.30%",assetEstimated:false,assetNote:"",
+    loanNote:false
+  },
+  /* 2분기 단독: 상반기 누적 − 1분기 역산 */
+  q2:{
+    label:"2분기", asof:"기준일 2026.06.01 · 2분기 단독",
+    carryName:"1분기 이월금", carryLabel:"1분기 이월",
+    bal:151793323, incomeTotal:227871198, expense:76077875,
+    carry:136396568, newIncome:91474630, rate:33.4, carryPct:59.9,
+    summary:[
+      ["일반헌금",7185861,81530710,73931591,14784980],
+      ["목적헌금",124841240,9333920,2146284,132028876],
+      ["NGC 예배",2029280,610000,0,2639280],
+      ["특별적립금",2340187,0,0,2340187]
+    ],
+    general:[["일반헌금",7185861,81530710,73931591,14784980]],
+    purpose:[
+      ["장학헌금",3250000,200000,0,3450000],
+      ["건축헌금",92664202,6667000,0,99331202],
+      ["미자립교회후원금",4773310,200000,0,4973310],
+      ["선교출판헌금",798175,0,0,798175],
+      ["출판사 후원금",1030000,0,0,1030000],
+      ["선교헌금",11049379,986740,2146284,9889835],
+      ["└개인후원헌금",775600,0,0,775600],
+      ["└카렌장학금",6697840,150000,0,6847840],
+      ["└선교헌금",3575939,836740,2146284,2266395],
+      ["기타목적헌금",11276174,1280180,0,12556354],
+      ["합계",124841240,9333920,2146284,132028876]
+    ],
+    ngc:[["NGC 예배",2029280,610000,0,2639280]],
+    reserve:[
+      ["특별 장학기금",0,0,0,0],["건축 적립금",2340187,0,0,2340187],
+      ["퇴직 적립금",0,0,0,0],["안식년 적립금",0,0,0,0],["합계",2340187,0,0,2340187]
+    ],
+    mov:{general:146813856,ngc:2639280,reserve:2340187,supplies:14817072},
+    assetTotal:4566610395,assetPct:"100.64%",assetEstimated:true,
+    assetNote:"통장잔액은 2분기말 기준 · 부동산·부채·사무용품은 연간 고정 · 합계는 산출값",
+    loanNote:true
+  }
+};
+
+var ASSET_FIXED = {
+  estate:[["교육관 4층",800000000,800000000],["본관",6200000000,6200000000]],
+  suppliesPrev:16463413,
+  movPrev:{general:117367230,ngc:1587890,reserve:2340187},
+  debt:[["농협 대출",-2600000000,-2600000000]],
+  assetPrevTotal:4537758720,
+  forex:[["미국달러 (USD)","$1,338",true],["└일반헌금","$400"],["└카렌장학금","$838"],["└담임목사사역비","$100"],["태국바트 (THB)","฿20,493",true]]
+};
+var LOAN=[
+  ["건축헌금",8008200,0,0,8008200],
+  ["미자립교회후원금",16764216,0,0,16764216],
+  ["특별 장학기금",103534542,0,0,103534542],
+  ["건축 적립금",66656554,0,0,66656554],
+  ["퇴직 적립금",88508074,0,0,88508074],
+  ["안식년 적립금",24000000,0,0,24000000],
+  ["합계",307471586,0,0,307471586]
+];
+
+/* ===== 헬퍼 ===== */
+function fmt(n){return Math.abs(n).toLocaleString("ko-KR");}
+function won(n){return n.toLocaleString("ko-KR")+"원";}
+function eok(n){return (n/1e8).toFixed(1)+"억원";}
+function tdNum(v){
+  var cls=v===0?"zero":(v<0?"neg":"");
+  return '<td class="num '+cls+'">'+(v<0?"-":"")+fmt(v)+'</td>';
+}
+function tableRows(rows){
+  return rows.map(function(r){
+    var name=r[0],isTot=(name==="합계"),isSub=name.charAt(0)==="└";
+    var disp=isSub?name.slice(1):name;
+    var ncls=isSub?"sub":"name";
+    var tds=r.slice(1).map(tdNum).join("");
+    return '<tr class="'+(isTot?"total":"")+'"><td class="l '+ncls+'">'+disp+'</td>'+tds+'</tr>';
+  }).join("");
+}
+function fourColTable(rows,carryLabel){
+  var cl=carryLabel||"이월";
+  return '<div class="card pad tbl-wrap"><table class="num">'
+    +'<thead><tr><th class="l">구분</th><th>'+cl+'</th><th>수입</th><th>지출</th><th>결산</th></tr></thead>'
+    +'<tbody>'+tableRows(rows)+'</tbody></table></div>';
+}
+function infoSvg(){
+  return '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#33509c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>';
+}
+
+/* ===== 카운트업 ===== */
+var rafId1,rafId2;
+function animEok(el,target,dur){
+  if(!el)return;
+  if(rafId1)cancelAnimationFrame(rafId1);
+  var s=performance.now();
+  function step(now){
+    var p=Math.min((now-s)/dur,1),e=1-Math.pow(1-p,3);
+    el.textContent=((target*e)/1e8).toFixed(1)+"억원";
+    if(p<1)rafId1=requestAnimationFrame(step);
+    else el.textContent=eok(target);
+  }
+  rafId1=requestAnimationFrame(step);
+}
+function animMini(el,target,dur){
+  if(!el)return;
+  if(rafId2)cancelAnimationFrame(rafId2);
+  var s=performance.now();
+  function step(now){
+    var p=Math.min((now-s)/dur,1),e=1-Math.pow(1-p,3);
+    el.textContent=((target*e)/1e8).toFixed(1)+"억";
+    if(p<1)rafId2=requestAnimationFrame(step);
+    else el.textContent=(target/1e8).toFixed(1)+"억";
+  }
+  rafId2=requestAnimationFrame(step);
+}
+function afterRender(){
+  var d=D[state.q];
+  animEok(document.getElementById("hero-big"),d.bal,950);
+  animMini(document.getElementById("hero-inc"),d.incomeTotal,750);
+  animMini(document.getElementById("hero-exp"),d.expense,750);
+}
+
+/* ===== 토스트 ===== */
+var toastTimer;
+function showToast(msg){
+  var t=document.getElementById("toast");
+  t.textContent=msg;
+  t.classList.add("show");
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(function(){t.classList.remove("show");},2800);
+}
+
+/* ===== ripple ===== */
+function addRipple(el){
+  el.addEventListener("click",function(e){
+    var r=document.createElement("span");
+    r.className="ripple-ink";
+    var rect=this.getBoundingClientRect();
+    var sz=Math.max(rect.width,rect.height);
+    r.style.cssText="width:"+sz+"px;height:"+sz+"px;top:"+(e.clientY-rect.top-sz/2)+"px;left:"+(e.clientX-rect.left-sz/2)+"px;";
+    this.appendChild(r);
+    setTimeout(function(){r.remove();},600);
+  });
+}
+
+/* ===== 세그 pill ===== */
+function positionPill(){
+  var btn=document.querySelector("#seg button.on");
+  var pill=document.getElementById("seg-pill");
+  if(!btn||!pill)return;
+  pill.style.left=btn.offsetLeft+"px";
+  pill.style.width=btn.offsetWidth+"px";
+}
+
+/* ===== 렌더 함수들 ===== */
+function renderOverview(d){
+  var q2badge=d.label==="2분기"?'<span class="badge-q2">단독</span>':'';
+  return ''
+  +'<div class="hero anim-hero">'
+    +'<div class="label">'+d.label+' 잔액 총계'+q2badge+'</div>'
+    +'<div class="big num" id="hero-big">'+eok(d.bal)+'</div>'
+    +'<div class="sub num">'+won(d.bal)+'</div>'
+    +'<div class="row">'
+      +'<div class="mini"><div class="t">수입 총계</div><div class="v num" id="hero-inc">'+(d.incomeTotal/1e8).toFixed(1)+'억</div></div>'
+      +'<div class="mini"><div class="t">지출 총계</div><div class="v num" id="hero-exp">'+(d.expense/1e8).toFixed(1)+'억</div></div>'
+    +'</div>'
+  +'</div>'
+  +'<div class="card pad anim d1" style="margin-top:12px;">'
+    +'<div class="rate-top"><div class="t">지출 집행률<span>수입 총계 대비</span></div><div class="pct num">'+d.rate+'%</div></div>'
+    +'<div class="bar"><span style="width:'+d.rate+'%"></span></div>'
+    +'<div class="rate-foot num">지출 '+won(d.expense)+' / 수입 '+won(d.incomeTotal)+'</div>'
+  +'</div>'
+  +'<div class="sec">핵심 지표</div>'
+  +'<div class="card km anim d2">'
+    +'<div class="r"><div class="name">신규 수입 (이월 제외)</div><div class="right"><div class="v blue num">'+eok(d.newIncome)+'</div><div class="note">이월금 '+d.carryPct+'% 제외</div></div></div>'
+    +'<div class="r"><div class="name">'+d.carryName+'</div><div class="right"><div class="v num">'+eok(d.carry)+'</div><div class="note">'+d.carryName+' 포함</div></div></div>'
+    +'<div class="r"><div class="name">결산 잔액</div><div class="right"><div class="v green num">'+eok(d.bal)+'</div><div class="note">'+won(d.bal)+'</div></div></div>'
+  +'</div>';
+}
+
+function renderAsset(d){
+  var f=ASSET_FIXED;
+  var colLabel="26년 "+d.label+(d.label==="2분기"?"말":"");
+  var rows=''
+    +'<tr><td class="l grouphd" colspan="3">부동산</td></tr>'
+    +f.estate.map(function(r){return '<tr><td class="l">'+r[0]+'</td>'+tdNum(r[1])+tdNum(r[2])+'</tr>';}).join("")
+    +'<tr><td class="l grouphd" colspan="3">동산</td></tr>'
+    +'<tr><td class="l">사무용품·음향기기</td>'+tdNum(f.suppliesPrev)+tdNum(d.mov.supplies)+'</tr>'
+    +'<tr><td class="l">일반통장 잔액</td>'+tdNum(f.movPrev.general)+tdNum(d.mov.general)+'</tr>'
+    +'<tr><td class="l">NGC예배 잔액</td>'+tdNum(f.movPrev.ngc)+tdNum(d.mov.ngc)+'</tr>'
+    +'<tr><td class="l">특별적립금 잔액</td>'+tdNum(f.movPrev.reserve)+tdNum(d.mov.reserve)+'</tr>'
+    +'<tr><td class="l grouphd debt" colspan="3">부채</td></tr>'
+    +f.debt.map(function(r){return '<tr><td class="l">'+r[0]+'</td>'+tdNum(r[1])+tdNum(r[2])+'</tr>';}).join("")
+    +'<tr class="total"><td class="l">합계</td>'+tdNum(f.assetPrevTotal)+tdNum(d.assetTotal)+'</tr>';
+  var fxRows=f.forex.map(function(r){
+    var bold=r[2]?"name":"sub";
+    return '<tr><td class="l '+bold+'">'+(r[0].charAt(0)==="└"?r[0].slice(1):r[0])+'</td><td class="num '+(r[2]?"name":"")+'">'+r[1]+'</td></tr>';
+  }).join("");
+  return ''
+  +(d.assetEstimated?'<div class="info anim">'+infoSvg()+'<div>보고서에 별도 자산현황표가 없어 <b>통장잔액만 결산으로 갱신</b>하고 부동산·부채는 연간 고정값으로 표시했습니다. 합계는 산출값입니다.</div></div>':'')
+  +'<div class="card totbar anim '+(d.assetEstimated?"":"d1")+'"><div class="t">26년 '+d.label+' 총자산</div><div class="v"><div class="a num">'+won(d.assetTotal).replace("원","")+'<span class="pill num">전년比 '+d.assetPct+'</span></div><div class="b">전년도 '+won(f.assetPrevTotal)+'</div></div></div>'
+  +'<div class="sec">자산현황</div>'
+  +'<div class="card pad tbl-wrap anim d2"><table class="num"><thead><tr><th class="l">항목</th><th>전년도 평가액</th><th>'+colLabel+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
+  +'<div class="cap">'+(d.assetNote||"사무용품·음향기기 10% 감가상각 · 농협 대출은 새성전 매입 부채")+'</div></div>'
+  +'<div class="sec">외화현황 <span style="font-weight:500;color:var(--text-mute);">(1분기 기준)</span></div>'
+  +'<div class="card pad tbl-wrap anim d3"><table class="num"><thead><tr><th class="l">통화 / 항목</th><th>결산</th></tr></thead><tbody>'+fxRows+'</tbody></table><div class="cap">태국바트: 일반헌금·선교출판·카렌장학</div></div>';
+}
+
+function renderOffering(d){
+  var generalNote="";
+  if(d.label==="상반기")generalNote='<div class="cap" style="margin:-4px 4px 0;">주일헌금과 행사통장(예산외)을 분리 회계 — 이월 ±13,926,148은 두 통장 간 상계분</div>';
+  if(d.label==="2분기")generalNote='<div class="cap" style="margin:-4px 4px 0;">2분기 단독 수치 · 상반기 누적에서 1분기 제외 산출 · 이월은 1분기 결산 잔액</div>';
+  return ''
+  +'<div class="grp anim">일반헌금 현황</div>'+fourColTable(d.general,d.carryLabel)+generalNote
+  +'<div class="grp anim d1">목적헌금 현황</div>'+fourColTable(d.purpose,d.carryLabel)
+  +'<div class="grp anim d2">NGC 예배 헌금 현황</div>'+fourColTable(d.ngc,d.carryLabel)
+  +'<div class="grp anim d3">특별 적립금 현황</div>'+fourColTable(d.reserve,d.carryLabel);
+}
+
+function renderLoan(d){
+  var msg=d.loanNote
+    ?'2분기 보고서에 차용금 표가 없어 <b>1분기 기준</b>으로 표시합니다. 외부 기관 차용이 아닌 계정 간 내부 차용입니다.'
+    :'외부 기관 차용이 아닌 <b>계정 간 내부 차용</b>입니다. 1분기 차용·상환 내역은 없습니다.';
+  return ''
+  +'<div class="info anim">'+infoSvg()+'<div>'+msg+'</div></div>'
+  +'<div class="card totbar anim d1"><div class="t">차용금 총계</div><div class="v"><div class="a num">'+fmt(307471586)+'</div><div class="b">전년 이월 = 결산 (변동 없음)</div></div></div>'
+  +'<div class="sec">계정간 차용금 현황</div>'
+  +'<div class="card pad tbl-wrap anim d2"><table class="num"><thead><tr><th class="l">구분</th><th>전년 이월</th><th>차용(-)</th><th>상환(+)</th><th>결산</th></tr></thead><tbody>'+tableRows(LOAN)+'</tbody></table></div>';
+}
+
+function renderRaw(d){
+  var s=d.summary.slice();
+  var tot=["합계",d.carry,
+    s.reduce(function(a,r){return a+r[2];},0),
+    s.reduce(function(a,r){return a+r[3];},0),
+    s.reduce(function(a,r){return a+r[4];},0)];
+  var cl=d.carryLabel||"이월";
+  return ''
+  +'<div class="sec" style="margin-top:6px;">분기 결산 요약 (구분별)</div>'
+  +'<div class="card pad tbl-wrap anim"><table class="num"><thead><tr><th class="l">구분</th><th>'+cl+'</th><th>신규 수입</th><th>지출</th><th>결산</th></tr></thead><tbody>'+tableRows(s.concat([tot]))+'</tbody></table>'
+  +'<div class="cap">신규 수입 = 이월 제외 · 결산 = '+cl+' + 신규수입 − 지출</div></div>'
+  +'<div class="sec">총계</div>'
+  +'<div class="card anim d1"><div class="totbar" style="border-bottom:1px solid var(--line);"><div class="t">수입 총계 (이월 포함)</div><div class="v"><div class="a num" style="font-size:20px;">'+fmt(d.incomeTotal)+'</div></div></div>'
+  +'<div class="totbar" style="border-bottom:1px solid var(--line);"><div class="t">지출 총계</div><div class="v"><div class="a num" style="font-size:20px;">'+fmt(d.expense)+'</div></div></div>'
+  +'<div class="totbar"><div class="t">잔액 총계</div><div class="v"><div class="a num" style="font-size:20px;color:var(--pos);">'+fmt(d.bal)+'</div></div></div></div>';
+}
+
+/* ===== 상태 / 라우팅 ===== */
+var state={q:"half",tab:"overview"};
+var R={overview:renderOverview,asset:renderAsset,offering:renderOffering,loan:renderLoan,raw:renderRaw};
+
+function render(){
+  var d=D[state.q];
+  document.getElementById("title").textContent="2026년 "+d.label+" 재정보고서";
+  document.getElementById("asof").innerHTML='<span class="asof-dot"></span>'+d.asof;
+  document.getElementById("v-"+state.tab).innerHTML=R[state.tab](d);
+  afterRender();
+}
+
+/* 세그 클릭 */
+document.getElementById("seg").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  var prev=state.q;
+  state.q=b.dataset.q;
+  this.querySelectorAll("button").forEach(function(x){
+    x.classList.toggle("on",x===b);
+    x.setAttribute("aria-selected",x===b?"true":"false");
+  });
+  positionPill();
+  ["overview","asset","offering","loan","raw"].forEach(function(t){document.getElementById("v-"+t).innerHTML="";});
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+  if(state.q==="q2"&&prev!=="q2")showToast("2분기 단독 · 상반기 누적에서 1분기 제외 산출");
+});
+
+/* 네비 클릭 */
+document.getElementById("nav").addEventListener("click",function(e){
+  var b=e.target.closest("button");if(!b)return;
+  state.tab=b.dataset.v;
+  this.querySelectorAll("button").forEach(function(x){
+    x.classList.toggle("on",x===b);
+    x.setAttribute("aria-current",x===b?"page":"false");
+  });
+  document.querySelectorAll(".view").forEach(function(s){s.classList.toggle("on",s.id==="v-"+state.tab);});
+  render();
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+
+/* 랜딩 터치 */
+function enterApp(){
+  var landing=document.getElementById("landing");
+  landing.classList.add("exit");
+  document.querySelector(".app").classList.add("visible");
+  setTimeout(function(){landing.style.display="none";},480);
+}
+document.getElementById("landing").addEventListener("click",enterApp);
+document.getElementById("landing").addEventListener("keydown",function(e){
+  if(e.key==="Enter"||e.key===" "){e.preventDefault();enterApp();}
+});
+
+/* 스크롤 진행 */
+window.addEventListener("scroll",function(){
+  var sc=document.documentElement.scrollTop||document.body.scrollTop;
+  var sh=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+  if(sh>0)document.getElementById("progress").style.width=(sc/sh*100)+"%";
+},{ passive:true });
+
+/* ripple 초기화 */
+document.querySelectorAll("#seg button").forEach(addRipple);
+document.querySelectorAll("#nav button").forEach(addRipple);
+
+/* 초기 렌더 */
+render();
+positionPill();
+window.addEventListener("resize",positionPill,{passive:true});
+document.fonts.ready.then(positionPill);
+</script>
+</body>
+</html>
