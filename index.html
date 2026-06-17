@@ -529,10 +529,10 @@ function renderAsset(d){
   +(d.assetEstimated?'<div class="info anim">'+infoSvg()+'<div>보고서에 별도 자산현황표가 없어 <b>통장잔액만 결산으로 갱신</b>하고 부동산·부채는 연간 고정값으로 표시했습니다. 합계는 산출값입니다.</div></div>':'')
   +'<div class="card totbar anim '+(d.assetEstimated?"":"d1")+'"><div class="t">26년 '+d.label+' 총자산</div><div class="v"><div class="a num">'+won(d.assetTotal).replace("원","")+'<span class="pill num">전년比 '+d.assetPct+'</span></div><div class="b">전년도 '+won(f.assetPrevTotal)+'</div></div></div>'
   +'<div class="sec">자산현황</div>'
-  +'<div class="card pad tbl-wrap anim d2"><table class="num"><thead><tr><th class="l">항목</th><th>전년도 평가액</th><th>'+colLabel+'</th></tr></thead><tbody>'+rows+'</tbody></table>'
-  +'<div class="cap">'+(d.assetNote||"사무용품·음향기기 10% 감가상각 · 농협 대출은 새성전 매입 부채")+'</div></div>'
+  +'<div class="card anim d2"><div class="tbl-wrap" style="padding:var(--pad) var(--pad) 0"><table class="num"><thead><tr><th class="l">항목</th><th>전년도 평가액</th><th>'+colLabel+'</th></tr></thead><tbody>'+rows+'</tbody></table></div>'
+  +'<div class="cap" style="padding:4px var(--pad) 12px">'+(d.assetNote||"사무용품·음향기기 10% 감가상각 · 농협 대출은 새성전 매입 부채")+'</div></div>'
   +'<div class="sec">외화현황 <span style="font-weight:500;color:var(--text-mute);">(1분기 기준)</span></div>'
-  +'<div class="card pad tbl-wrap anim d3"><table class="num"><thead><tr><th class="l">통화 / 항목</th><th>결산</th></tr></thead><tbody>'+fxRows+'</tbody></table><div class="cap">태국바트: 일반헌금·선교출판·카렌장학</div></div>';
+  +'<div class="card anim d3"><div class="tbl-wrap" style="padding:var(--pad) var(--pad) 0"><table class="num"><thead><tr><th class="l">통화 / 항목</th><th>결산</th></tr></thead><tbody>'+fxRows+'</tbody></table></div><div class="cap" style="padding:4px var(--pad) 12px">태국바트: 일반헌금·선교출판·카렌장학</div></div>';
 }
 
 function renderOffering(d){
@@ -566,8 +566,8 @@ function renderRaw(d){
   var cl=d.carryLabel||"이월";
   return ''
   +'<div class="sec" style="margin-top:6px;">분기 결산 요약 (구분별)</div>'
-  +'<div class="card pad tbl-wrap anim"><table class="num"><thead><tr><th class="l">구분</th><th>'+cl+'</th><th>신규 수입</th><th>지출</th><th>결산</th></tr></thead><tbody>'+tableRows(s.concat([tot]))+'</tbody></table>'
-  +'<div class="cap">신규 수입 = 이월 제외 · 결산 = '+cl+' + 신규수입 − 지출</div></div>'
+  +'<div class="card anim"><div class="tbl-wrap" style="padding:var(--pad) var(--pad) 0"><table class="num"><thead><tr><th class="l">구분</th><th>'+cl+'</th><th>신규 수입</th><th>지출</th><th>결산</th></tr></thead><tbody>'+tableRows(s.concat([tot]))+'</tbody></table></div>'
+  +'<div class="cap" style="padding:4px var(--pad) 12px">신규 수입 = 이월 제외 · 결산 = '+cl+' + 신규수입 − 지출</div></div>'
   +'<div class="sec">총계</div>'
   +'<div class="card anim d1"><div class="totbar" style="border-bottom:1px solid var(--line);"><div class="t">수입 총계 (이월 포함)</div><div class="v"><div class="a num" style="font-size:20px;">'+fmt(d.incomeTotal)+'</div></div></div>'
   +'<div class="totbar" style="border-bottom:1px solid var(--line);"><div class="t">지출 총계</div><div class="v"><div class="a num" style="font-size:20px;">'+fmt(d.expense)+'</div></div></div>'
