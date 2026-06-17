@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>원본 자료 · 사랑과평안의교회</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.min.css" />
+<style>
+:root{
+  --bg:#f2f4f6;--surface:#ffffff;
+  --navy:#1b3a8b;--navy-dark:#0a1d50;--brand:#2563eb;
+  --text:#191f28;--text-sub:#6b7684;--text-mute:#8b95a1;
+  --border:#e8ebed;--line:#f1f3f5;--pos:#0f7b3f;
+  --pad:16px;--radius:14px;--radius-sm:10px;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+@keyframes heroIn{from{opacity:0;transform:scale(.97);}to{opacity:1;transform:scale(1);}}
+@keyframes chev{to{transform:rotate(180deg);}}
+
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);}
+body{font-family:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;color:var(--text);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;}
+
+.app{max-width:480px;margin:0 auto;min-height:100vh;background:var(--bg);}
+
+/* header */
+header{background:linear-gradient(145deg,var(--navy) 0%,var(--navy-dark) 100%);padding:calc(env(safe-area-inset-top,0px) + 18px) var(--pad) 22px;position:relative;overflow:hidden;}
+header::before{content:'';position:absolute;top:-60px;right:-40px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none;}
+.hd-back{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#aebbe2;font-weight:600;text-decoration:none;margin-bottom:16px;position:relative;}
+.hd-back svg{width:16px;height:16px;}
+header .org{font-size:12px;color:#c4d0ee;font-weight:700;letter-spacing:.04em;animation:fadeUp .4s ease both;}
+header h1{font-size:22px;font-weight:900;color:#fff;margin-top:4px;letter-spacing:-.02em;animation:fadeUp .42s ease .06s both;}
+header .sub{font-size:13px;color:#7a9ac8;margin-top:5px;animation:fadeUp .44s ease .12s both;}
+
+/* scroll body */
+.scroll{padding:16px var(--pad) calc(env(safe-area-inset-bottom,0px) + 28px);}
+
+/* section label */
+.sec{font-size:13px;font-weight:800;color:var(--text-sub);margin:20px 2px 10px;letter-spacing:.01em;animation:fadeUp .38s ease both;}
+.sec:first-child{margin-top:0;}
+
+/* pdf card */
+.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;animation:fadeUp .38s cubic-bezier(.22,.68,0,1.2) both;}
+.pdf-card+.pdf-card{margin-top:10px;}
+
+.pdf-hd{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;font-family:inherit;cursor:pointer;padding:14px var(--pad);gap:12px;text-align:left;min-height:64px;}
+.pdf-hd:active{background:var(--bg);}
+.pdf-hd-left{display:flex;align-items:center;gap:12px;}
+.pdf-badge{flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:.04em;}
+.pdf-hd-info .t{font-size:14px;font-weight:700;color:var(--text);}
+.pdf-hd-info .s{font-size:12px;color:var(--text-mute);margin-top:2px;}
+.pdf-chev{flex-shrink:0;color:var(--text-mute);transition:transform .28s cubic-bezier(.2,.7,.3,1);}
+.pdf-chev.open{transform:rotate(180deg);}
+
+/* accordion body */
+.pdf-body{height:0;overflow:hidden;transition:height .38s cubic-bezier(.2,.7,.3,1);}
+.pdf-frame-wrap{border-top:1px solid var(--line);}
+.pdf-frame{width:100%;height:500px;border:none;display:block;background:var(--bg);}
+.pdf-actions{display:flex;border-top:1px solid var(--line);}
+.pdf-actions a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:var(--brand);padding:13px var(--pad);text-decoration:none;}
+.pdf-actions a:first-child{border-right:1px solid var(--line);}
+.pdf-actions a svg{width:15px;height:15px;}
+
+/* ripple */
+@keyframes ripple{to{transform:scale(5);opacity:0;}}
+.ripple-ink{position:absolute;border-radius:50%;transform:scale(0);animation:ripple .55s ease-out;pointer-events:none;background:rgba(37,99,235,.1);}
+.pdf-hd{position:relative;overflow:hidden;}
+
+.d1{animation-delay:.06s;}.d2{animation-delay:.12s;}.d3{animation-delay:.18s;}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important;}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <a class="hd-back" href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+      재정보고서로 돌아가기
+    </a>
+    <div class="org">사랑과평안의교회</div>
+    <h1>원본 자료</h1>
+    <div class="sub">2026년 1·2분기 원본 PDF 문서</div>
+  </header>
+
+  <div class="scroll">
+    <div class="sec d1">1분기</div>
+
+    <div class="pdf-card d1">
+      <button class="pdf-hd" onclick="toggle(this,'q1.pdf','재정보고서(26년 1분기).pdf')">
+        <div class="pdf-hd-left">
+          <div class="pdf-badge">PDF</div>
+          <div class="pdf-hd-info">
+            <div class="t">재정보고서</div>
+            <div class="s">26년 1분기 · 55KB</div>
+          </div>
+        </div>
+        <svg class="pdf-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="pdf-body" id="body-q1">
+        <div class="pdf-frame-wrap">
+          <iframe class="pdf-frame" title="재정보고서 1분기"></iframe>
+        </div>
+        <div class="pdf-actions">
+          <a href="q1.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            새 탭에서 열기
+          </a>
+          <a href="q1.pdf" download="재정보고서(26년 1분기).pdf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            다운로드
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec d2">2분기</div>
+
+    <div class="pdf-card d2">
+      <button class="pdf-hd" onclick="toggle(this,'q2.pdf','재정현황(26년 2분기).pdf')">
+        <div class="pdf-hd-left">
+          <div class="pdf-badge">PDF</div>
+          <div class="pdf-hd-info">
+            <div class="t">재정현황</div>
+            <div class="s">26년 2분기 · 19KB</div>
+          </div>
+        </div>
+        <svg class="pdf-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="pdf-body" id="body-q2">
+        <div class="pdf-frame-wrap">
+          <iframe class="pdf-frame" title="재정현황 2분기"></iframe>
+        </div>
+        <div class="pdf-actions">
+          <a href="q2.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            새 탭에서 열기
+          </a>
+          <a href="q2.pdf" download="재정현황(26년 2분기).pdf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            다운로드
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="pdf-card d3" style="margin-top:10px;">
+      <button class="pdf-hd" onclick="toggle(this,'q2-balance.pdf','잔액보고(26년 2분기).pdf')">
+        <div class="pdf-hd-left">
+          <div class="pdf-badge">PDF</div>
+          <div class="pdf-hd-info">
+            <div class="t">잔액보고</div>
+            <div class="s">26년 2분기 · 49KB</div>
+          </div>
+        </div>
+        <svg class="pdf-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
+      </button>
+      <div class="pdf-body" id="body-q2b">
+        <div class="pdf-frame-wrap">
+          <iframe class="pdf-frame" title="잔액보고 2분기"></iframe>
+        </div>
+        <div class="pdf-actions">
+          <a href="q2-balance.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+            새 탭에서 열기
+          </a>
+          <a href="q2-balance.pdf" download="잔액보고(26년 2분기).pdf">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            다운로드
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggle(btn, src, dlName){
+  var card=btn.closest('.pdf-card');
+  var body=card.querySelector('.pdf-body');
+  var chev=btn.querySelector('.pdf-chev');
+  var frame=card.querySelector('.pdf-frame');
+  var isOpen=body.style.height&&body.style.height!=='0px';
+  if(isOpen){
+    body.style.height='0px';
+    chev.classList.remove('open');
+  } else {
+    if(!frame.src||frame.src==='about:blank'||!frame.getAttribute('data-loaded')){
+      frame.src=src;
+      frame.setAttribute('data-loaded','1');
+      var dl=card.querySelectorAll('.pdf-actions a');
+      if(dl[0])dl[0].href=src;
+    }
+    body.style.height=body.scrollHeight+'px';
+    chev.classList.add('open');
+    setTimeout(function(){body.style.height='560px';},10);
+  }
+  addRipple(btn,event);
+}
+
+function addRipple(el,e){
+  if(!e)return;
+  var r=document.createElement('span');
+  r.className='ripple-ink';
+  var rect=el.getBoundingClientRect();
+  var sz=Math.max(rect.width,rect.height);
+  r.style.cssText='width:'+sz+'px;height:'+sz+'px;top:'+(e.clientY-rect.top-sz/2)+'px;left:'+(e.clientX-rect.left-sz/2)+'px;';
+  el.appendChild(r);
+  setTimeout(function(){r.remove();},600);
+}
+</script>
+</body>
+</html>
