@@ -171,6 +171,24 @@ nav button.on{color:var(--brand);}
 nav button.on svg{transform:scale(1.12);}
 nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20px;height:2.5px;background:var(--brand);border-radius:0 0 3px 3px;animation:navBar .3s cubic-bezier(.22,.68,0,1.2) both;}
 
+/* ── pdf toggle (원본 탭) ────────── */
+.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.pdf-card+.pdf-card{margin-top:10px;}
+.pdf-hd{width:100%;display:flex;justify-content:space-between;align-items:center;background:none;border:none;font-family:inherit;cursor:pointer;padding:14px var(--pad);gap:12px;text-align:left;position:relative;overflow:hidden;min-height:64px;}
+.pdf-hd:active{background:var(--bg);}
+.pdf-hd-left{display:flex;align-items:center;gap:12px;}
+.pdf-badge{flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:.04em;}
+.pdf-hd-info .pt{font-size:14px;font-weight:700;color:var(--text);}
+.pdf-hd-info .ps{font-size:12px;color:var(--text-mute);margin-top:2px;}
+.pdf-chev{flex-shrink:0;color:var(--text-mute);transition:transform .28s cubic-bezier(.2,.7,.3,1);}
+.pdf-chev.open{transform:rotate(180deg);}
+.pdf-body{height:0;overflow:hidden;transition:height .38s cubic-bezier(.2,.7,.3,1);}
+.pdf-frame{width:100%;height:500px;border:none;display:block;background:var(--bg);border-top:1px solid var(--line);}
+.pdf-actions{display:flex;border-top:1px solid var(--line);}
+.pdf-actions a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:var(--brand);padding:13px var(--pad);text-decoration:none;}
+.pdf-actions a:first-child{border-right:1px solid var(--line);}
+.pdf-actions a svg{width:15px;height:15px;}
+
 /* ── toast ──────────────────────── */
 #toast{position:fixed;left:50%;bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%) translateY(8px);background:rgba(25,31,40,.92);color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;z-index:150;white-space:nowrap;transition:opacity .25s,transform .25s;}
 #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
@@ -557,21 +575,41 @@ function renderLoan(d){
   +'<div class="card pad tbl-wrap anim d2"><table class="num"><thead><tr><th class="l">구분</th><th>전년 이월</th><th>차용(-)</th><th>상환(+)</th><th>결산</th></tr></thead><tbody>'+tableRows(LOAN)+'</tbody></table></div>';
 }
 
-function renderRaw(d){
-  var s=d.summary.slice();
-  var tot=["합계",d.carry,
-    s.reduce(function(a,r){return a+r[2];},0),
-    s.reduce(function(a,r){return a+r[3];},0),
-    s.reduce(function(a,r){return a+r[4];},0)];
-  var cl=d.carryLabel||"이월";
+function pdfCard(id,title,sub,src,dl){
+  var chevSvg='<svg class="pdf-chev" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>';
+  var openSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
+  var dlSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+  return '<div class="pdf-card" id="'+id+'">'
+    +'<button class="pdf-hd" onclick="togglePdfCard(\''+id+'\',\''+src+'\')">'
+    +'<div class="pdf-hd-left"><div class="pdf-badge">PDF</div>'
+    +'<div class="pdf-hd-info"><div class="pt">'+title+'</div><div class="ps">'+sub+'</div></div></div>'
+    +chevSvg+'</button>'
+    +'<div class="pdf-body">'
+    +'<iframe class="pdf-frame" title="'+title+'"></iframe>'
+    +'<div class="pdf-actions">'
+    +'<a href="'+src+'" target="_blank">'+openSvg+'새 탭에서 열기</a>'
+    +'<a href="'+src+'" download="'+dl+'">'+dlSvg+'다운로드</a>'
+    +'</div></div></div>';
+}
+function renderRaw(){
   return ''
-  +'<div class="sec" style="margin-top:6px;">분기 결산 요약 (구분별)</div>'
-  +'<div class="card anim"><div class="tbl-wrap" style="padding:var(--pad) var(--pad) 0"><table class="num"><thead><tr><th class="l">구분</th><th>'+cl+'</th><th>신규 수입</th><th>지출</th><th>결산</th></tr></thead><tbody>'+tableRows(s.concat([tot]))+'</tbody></table></div>'
-  +'<div class="cap" style="padding:4px var(--pad) 12px">신규 수입 = 이월 제외 · 결산 = '+cl+' + 신규수입 − 지출</div></div>'
-  +'<div class="sec">총계</div>'
-  +'<div class="card anim d1"><div class="totbar" style="border-bottom:1px solid var(--line);"><div class="t">수입 총계 (이월 포함)</div><div class="v"><div class="a num" style="font-size:20px;">'+fmt(d.incomeTotal)+'</div></div></div>'
-  +'<div class="totbar" style="border-bottom:1px solid var(--line);"><div class="t">지출 총계</div><div class="v"><div class="a num" style="font-size:20px;">'+fmt(d.expense)+'</div></div></div>'
-  +'<div class="totbar"><div class="t">잔액 총계</div><div class="v"><div class="a num" style="font-size:20px;color:var(--pos);">'+fmt(d.bal)+'</div></div></div></div>';
+  +'<div class="sec" style="margin-top:6px;">원본 PDF 자료</div>'
+  +pdfCard('raw-pdf1','재정보고 26년 1분기','기준일 26.03.01','q1.pdf','재정보고서(26년 1분기).pdf')
+  +pdfCard('raw-pdf2','재정보고 26년 2분기','기준일 26.06.01','q2.pdf','재정현황(26년 2분기).pdf');
+}
+
+function togglePdfCard(id,src){
+  var card=document.getElementById(id);
+  var body=card.querySelector('.pdf-body');
+  var chev=card.querySelector('.pdf-chev');
+  var frame=card.querySelector('.pdf-frame');
+  var isOpen=body.style.height&&body.style.height!=='0px';
+  if(isOpen){body.style.height='0px';chev.classList.remove('open');}
+  else{
+    if(!frame.getAttribute('data-loaded')){frame.src=src;frame.setAttribute('data-loaded','1');}
+    chev.classList.add('open');
+    setTimeout(function(){body.style.height='560px';},10);
+  }
 }
 
 /* ===== 상태 / 라우팅 ===== */
