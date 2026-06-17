@@ -171,13 +171,17 @@ nav button.on{color:var(--brand);}
 nav button.on svg{transform:scale(1.12);}
 nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20px;height:2.5px;background:var(--brand);border-radius:0 0 3px 3px;animation:navBar .3s cubic-bezier(.22,.68,0,1.2) both;}
 
-/* ── pdf toggle (원본 탭) ────────── */
+/* ── pdf viewer (원본 탭) ────────── */
 .pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
 .pdf-card+.pdf-card{margin-top:10px;}
 .pdf-info{display:flex;align-items:center;gap:12px;padding:14px var(--pad);border-bottom:1px solid var(--line);}
 .pdf-badge{flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:.04em;}
 .pdf-hd-info .pt{font-size:14px;font-weight:700;color:var(--text);}
 .pdf-hd-info .ps{font-size:12px;color:var(--text-mute);margin-top:2px;}
+.pdf-wrap{position:relative;}
+.pdf-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:48px var(--pad);font-size:13px;color:var(--text-mute);background:var(--bg);}
+.pdf-spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg);}}
 .pdf-frame{width:100%;height:500px;border:none;display:block;background:var(--bg);}
 .pdf-actions{display:flex;border-top:1px solid var(--line);}
 .pdf-actions a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:var(--brand);padding:13px var(--pad);text-decoration:none;}
@@ -581,9 +585,12 @@ function renderRaw(){
     return '<div class="pdf-card">'
       +'<div class="pdf-info"><div class="pdf-badge">PDF</div>'
       +'<div class="pdf-hd-info"><div class="pt">'+title+'</div><div class="ps">'+sub+'</div></div></div>'
-      +'<iframe class="pdf-frame" src="'+frameSrc+'" title="'+title+'"></iframe>'
+      +'<div class="pdf-wrap">'
+      +'<div class="pdf-loading"><span class="pdf-spin"></span>PDF 불러오는 중…</div>'
+      +'<iframe class="pdf-frame" src="'+frameSrc+'" title="'+title+'" loading="lazy" onload="this.previousElementSibling.remove()"></iframe>'
+      +'</div>'
       +'<div class="pdf-actions">'
-      +'<a href="'+full+'" target="_blank">'+openSvg+'새 탭에서 열기</a>'
+      +'<a href="'+full+'" target="_blank" rel="noopener noreferrer">'+openSvg+'새 탭에서 열기</a>'
       +'<a href="'+full+'" download="'+dl+'">'+dlSvg+'다운로드</a>'
       +'</div></div>';
   }
@@ -600,7 +607,8 @@ function render(){
   var d=D[state.q];
   document.getElementById("title").textContent="2026년 "+d.label+" 재정보고서";
   document.getElementById("asof").innerHTML='<span class="asof-dot"></span>'+d.asof;
-  document.getElementById("v-"+state.tab).innerHTML=R[state.tab](d);
+  var el=document.getElementById("v-"+state.tab);
+  if(!el.children.length)el.innerHTML=R[state.tab](d);
   afterRender();
 }
 
