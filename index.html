@@ -171,33 +171,18 @@ nav button.on{color:var(--brand);}
 nav button.on svg{transform:scale(1.12);}
 nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:20px;height:2.5px;background:var(--brand);border-radius:0 0 3px 3px;animation:navBar .3s cubic-bezier(.22,.68,0,1.2) both;}
 
-/* ── pdf viewer (원본 탭) ────────── */
-.pdf-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
-.pdf-card+.pdf-card{margin-top:10px;}
-.pdf-info{display:flex;align-items:center;gap:12px;padding:14px var(--pad);border-bottom:1px solid var(--line);}
-.pdf-badge{flex-shrink:0;width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;font-size:9.5px;font-weight:800;display:flex;align-items:center;justify-content:center;letter-spacing:.04em;}
-.pdf-hd-info .pt{font-size:14px;font-weight:700;color:var(--text);}
-.pdf-hd-info .ps{font-size:12px;color:var(--text-mute);margin-top:2px;}
-.pdf-wrap{position:relative;}
-.pdf-loading{display:flex;align-items:center;justify-content:center;gap:8px;padding:48px var(--pad);font-size:13px;color:var(--text-mute);background:var(--bg);}
-.pdf-spin{width:16px;height:16px;border:2px solid var(--border);border-top-color:var(--brand);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg);}}
-.pdf-err{display:none;flex-direction:column;align-items:center;gap:10px;padding:36px var(--pad);text-align:center;background:var(--bg);border-bottom:1px solid var(--line);}
-.pdf-err.show{display:flex;}
-.pdf-err .pe-ico{width:40px;height:40px;border-radius:10px;background:var(--line);display:flex;align-items:center;justify-content:center;color:var(--text-mute);}
-.pdf-err .pe-msg{font-size:13px;color:var(--text-sub);line-height:1.6;}
-.pdf-err .pe-btn{display:inline-flex;align-items:center;gap:6px;color:var(--brand);font-size:13px;font-weight:700;text-decoration:none;margin-top:2px;}
-.pdf-err .pe-btn svg{width:14px;height:14px;}
-.pdf-frame{width:100%;height:500px;border:none;display:block;background:var(--bg);}
-.pdf-android-body{background:var(--bg);border-bottom:1px solid var(--line);padding:32px var(--pad);display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
-.pdf-android-body .pa-icon{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));display:flex;align-items:center;justify-content:center;}
-.pdf-android-body .pa-msg{font-size:13px;color:var(--text-sub);line-height:1.6;margin:2px 0 6px;}
-.pdf-android-body .pa-btn{display:inline-flex;align-items:center;gap:7px;background:var(--navy);color:#fff;font-size:13px;font-weight:700;padding:12px 22px;border-radius:10px;text-decoration:none;}
-.pdf-android-body .pa-btn svg{width:15px;height:15px;}
-.pdf-actions{display:flex;border-top:1px solid var(--line);}
-.pdf-actions a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;color:var(--brand);padding:13px var(--pad);text-decoration:none;}
-.pdf-actions a:first-child{border-right:1px solid var(--line);}
-.pdf-actions a svg{width:15px;height:15px;}
+/* ── report nav cards (원본 탭) ── */
+.rpt-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.rpt-card+.rpt-card{margin-top:10px;}
+.rpt-hd{display:flex;align-items:center;gap:12px;padding:16px var(--pad);}
+.rpt-num{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;font-size:16px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0;letter-spacing:-.02em;}
+.rpt-title{font-size:14px;font-weight:700;color:var(--text);}
+.rpt-sub{font-size:12px;color:var(--text-mute);margin-top:2px;}
+.rpt-tags{display:flex;flex-wrap:wrap;gap:5px;padding:0 var(--pad) 14px;}
+.rpt-tag{font-size:11.5px;font-weight:600;color:var(--text-sub);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 9px;}
+.rpt-actions{display:flex;border-top:1px solid var(--line);}
+.rpt-open{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--navy),var(--navy-dark));padding:14px var(--pad);text-decoration:none;}
+.rpt-dl{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:700;color:var(--brand);padding:14px 18px;text-decoration:none;border-left:1px solid var(--line);white-space:nowrap;}
 
 /* ── toast ──────────────────────── */
 #toast{position:fixed;left:50%;bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%) translateY(8px);background:rgba(25,31,40,.92);color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;z-index:150;white-space:nowrap;transition:opacity .25s,transform .25s;}
@@ -475,13 +460,6 @@ function afterRender(){
   animEok(document.getElementById("hero-big"),d.bal,950);
   animMini(document.getElementById("hero-inc"),d.incomeTotal,750);
   animMini(document.getElementById("hero-exp"),d.expense,750);
-  if(state.tab==='raw'&&!_isAndroid){
-    ['pdf1','pdf2'].forEach(function(uid){
-      if(document.getElementById('pdfload-'+uid)&&!_pdfTimers[uid]){
-        _pdfTimers[uid]=setTimeout(function(){pdfOnErr(uid);},18000);
-      }
-    });
-  }
 }
 
 /* ===== 토스트 ===== */
@@ -592,67 +570,28 @@ function renderLoan(d){
   +'<div class="card pad tbl-wrap anim d2"><table class="num"><thead><tr><th class="l">구분</th><th>전년 이월</th><th>차용(-)</th><th>상환(+)</th><th>결산</th></tr></thead><tbody>'+tableRows(LOAN)+'</tbody></table></div>';
 }
 
-var _pdfTimers={};
-var _isAndroid=/Android/i.test(navigator.userAgent);
-
-function pdfOnLoad(uid){
-  clearTimeout(_pdfTimers[uid]);
-  delete _pdfTimers[uid];
-  var el=document.getElementById('pdfload-'+uid);
-  if(el)el.remove();
-}
-function pdfOnErr(uid){
-  clearTimeout(_pdfTimers[uid]);
-  delete _pdfTimers[uid];
-  var loader=document.getElementById('pdfload-'+uid);
-  if(loader)loader.remove();
-  var frame=document.getElementById('pdfframe-'+uid);
-  if(frame)frame.style.display='none';
-  var err=document.getElementById('pdferr-'+uid);
-  if(err)err.classList.add('show');
-}
-
 function renderRaw(){
   var base=location.origin+location.pathname.replace(/[^\/]*$/,'');
-  var openSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>';
-  var dlSvg='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
-  var docSvg='<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>';
-  var warnSvg='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
-  var n=0;
-  function pdfSection(title,sub,src,dl){
-    var full=base+src;
-    var uid='pdf'+(++n);
-    var body;
-    if(_isAndroid){
-      body='<div class="pdf-android-body">'
-        +'<div class="pa-icon">'+docSvg+'</div>'
-        +'<div class="pa-msg">Android에서 PDF는 새 탭에서<br>Chrome 뷰어로 바로 볼 수 있습니다</div>'
-        +'<a class="pa-btn" href="'+full+'" target="_blank" rel="noopener noreferrer">'+openSvg+'새 탭에서 열기</a>'
-        +'</div>';
-    } else {
-      body='<div class="pdf-wrap">'
-        +'<div class="pdf-loading" id="pdfload-'+uid+'"><span class="pdf-spin"></span>PDF 불러오는 중…</div>'
-        +'<div class="pdf-err" id="pdferr-'+uid+'">'
-        +'<div class="pe-ico">'+warnSvg+'</div>'
-        +'<div class="pe-msg">PDF를 불러오지 못했습니다.<br>새 탭에서 확인해 주세요.</div>'
-        +'<a class="pe-btn" href="'+full+'" target="_blank" rel="noopener noreferrer">'+openSvg+'새 탭에서 열기</a>'
-        +'</div>'
-        +'<iframe class="pdf-frame" id="pdfframe-'+uid+'" src="'+src+'" title="'+title+'" loading="lazy"'
-        +' onload="pdfOnLoad(\''+uid+'\')" onerror="pdfOnErr(\''+uid+'\')"></iframe>'
-        +'</div>';
-    }
-    return '<div class="pdf-card">'
-      +'<div class="pdf-info"><div class="pdf-badge">PDF</div>'
-      +'<div class="pdf-hd-info"><div class="pt">'+title+'</div><div class="ps">'+sub+'</div></div></div>'
-      +body
-      +'<div class="pdf-actions">'
-      +'<a href="'+full+'" target="_blank" rel="noopener noreferrer">'+openSvg+'새 탭에서 열기</a>'
-      +'<a href="'+full+'" download="'+dl+'">'+dlSvg+'다운로드</a>'
+  var arrowSvg='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="M12 5l7 7-7 7"/></svg>';
+  var dlSvg='<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
+  function rptCard(num,title,sub,secs,href,pdfSrc,dl){
+    var tags=secs.map(function(s){return '<span class="rpt-tag">'+s+'</span>';}).join('');
+    return '<div class="rpt-card">'
+      +'<div class="rpt-hd"><div class="rpt-num">'+num+'</div>'
+      +'<div><div class="rpt-title">'+title+'</div><div class="rpt-sub">'+sub+'</div></div></div>'
+      +'<div class="rpt-tags">'+tags+'</div>'
+      +'<div class="rpt-actions">'
+      +'<a class="rpt-open" href="'+href+'">보고서 보기'+arrowSvg+'</a>'
+      +'<a class="rpt-dl" href="'+base+pdfSrc+'" download="'+dl+'" title="PDF 다운로드">'+dlSvg+'PDF</a>'
       +'</div></div>';
   }
-  return '<div class="sec" style="margin-top:6px;">원본 PDF 자료</div>'
-    +pdfSection('재정보고 26년 1분기','기준일 26.03.01','q1.pdf','재정보고서(26년 1분기).pdf')
-    +pdfSection('재정보고 26년 2분기','기준일 26.06.01','q2.pdf','재정현황(26년 2분기).pdf');
+  return '<div class="sec" style="margin-top:6px;">원본 보고서</div>'
+    +rptCard('01','재정보고 26년 1분기','기준일 26.03.01 · 9개 섹션',
+      ['잔액현황','결산금 현황','자산현황','차용금','일반헌금','목적헌금','NGC 예배','적립금','외화현황'],
+      'docs.html#doc1','q1.pdf','재정보고서(26년 1분기).pdf')
+    +rptCard('02','재정보고 26년 2분기','기준일 26.06.01 · 재정현황',
+      ['26년도 재정 현황'],
+      'docs.html#doc2','q2.pdf','재정현황(26년 2분기).pdf');
 }
 
 /* ===== 상태 / 라우팅 ===== */
@@ -678,7 +617,6 @@ document.getElementById("seg").addEventListener("click",function(e){
     x.setAttribute("aria-selected",x===b?"true":"false");
   });
   positionPill();
-  Object.keys(_pdfTimers).forEach(function(k){clearTimeout(_pdfTimers[k]);delete _pdfTimers[k];});
   ["overview","asset","offering","loan","raw"].forEach(function(t){document.getElementById("v-"+t).innerHTML="";});
   render();
   window.scrollTo({top:0,behavior:"smooth"});

@@ -878,6 +878,22 @@ function toggleDoc(id) {
   }
 }
 
+// Hash-based auto-open: docs.html#doc1 or docs.html#doc2
+(function(){
+  var hash=location.hash.replace('#','');
+  if(!hash)return;
+  var card=document.getElementById(hash);
+  if(!card)return;
+  var body=card.querySelector('.doc-body');
+  var chev=card.querySelector('.doc-chev');
+  body.classList.add('open');
+  body.style.height='auto';
+  if(chev)chev.classList.add('open');
+  setTimeout(function(){
+    card.scrollIntoView({behavior:'smooth',block:'start'});
+  },80);
+})();
+
 // Ripple effect on doc-hd buttons
 document.querySelectorAll('.doc-hd').forEach(function(btn) {
   btn.addEventListener('click', function(e) {
