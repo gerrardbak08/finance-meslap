@@ -878,6 +878,12 @@ function toggleDoc(id) {
   }
 }
 
+// iframe 내부에서 열릴 때 뒤로가기 링크 숨김 (index.html 패널 사용)
+if(window.self!==window.top){
+  var backEl=document.querySelector('.hd-back');
+  if(backEl)backEl.style.display='none';
+}
+
 // Hash-based auto-open: docs.html#doc1 or docs.html#doc2
 (function(){
   var hash=location.hash.replace('#','');

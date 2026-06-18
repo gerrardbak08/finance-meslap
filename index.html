@@ -181,8 +181,18 @@ nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:trans
 .rpt-tags{display:flex;flex-wrap:wrap;gap:5px;padding:0 var(--pad) 14px;}
 .rpt-tag{font-size:11.5px;font-weight:600;color:var(--text-sub);background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:3px 9px;}
 .rpt-actions{display:flex;border-top:1px solid var(--line);}
-.rpt-open{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--navy),var(--navy-dark));padding:14px var(--pad);text-decoration:none;}
+.rpt-open{flex:1;display:inline-flex;align-items:center;justify-content:center;gap:7px;font-size:13px;font-weight:700;color:#fff;background:linear-gradient(135deg,var(--navy),var(--navy-dark));padding:14px var(--pad);border:none;font-family:inherit;cursor:pointer;}
 .rpt-dl{display:flex;align-items:center;justify-content:center;gap:5px;font-size:12px;font-weight:700;color:var(--brand);padding:14px 18px;text-decoration:none;border-left:1px solid var(--line);white-space:nowrap;}
+
+/* ── report slide panel ─────────── */
+#rpanel{position:fixed;inset:0;z-index:250;display:flex;flex-direction:column;background:var(--bg);transform:translateX(100%);transition:transform .32s cubic-bezier(.2,.7,.3,1);will-change:transform;}
+#rpanel.open{transform:translateX(0);}
+.rp-hd{flex-shrink:0;background:linear-gradient(145deg,var(--navy) 0%,var(--navy-dark) 100%);padding:calc(env(safe-area-inset-top,0px)+14px) var(--pad) 16px;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+.rp-hd::before{content:'';position:absolute;top:-50px;right:-30px;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none;}
+.rp-back{background:none;border:none;display:flex;align-items:center;gap:5px;color:#aebbe2;font-size:13px;font-weight:600;cursor:pointer;padding:0;font-family:inherit;position:relative;}
+.rp-back svg{width:16px;height:16px;}
+.rp-ttl{font-size:14px;font-weight:700;color:#fff;position:relative;}
+#rpanel iframe{flex:1;border:none;width:100%;display:block;background:var(--bg);}
 
 /* ── toast ──────────────────────── */
 #toast{position:fixed;left:50%;bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%) translateY(8px);background:rgba(25,31,40,.92);color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;z-index:150;white-space:nowrap;transition:opacity .25s,transform .25s;}
@@ -581,7 +591,7 @@ function renderRaw(){
       +'<div><div class="rpt-title">'+title+'</div><div class="rpt-sub">'+sub+'</div></div></div>'
       +'<div class="rpt-tags">'+tags+'</div>'
       +'<div class="rpt-actions">'
-      +'<a class="rpt-open" href="'+href+'">보고서 보기'+arrowSvg+'</a>'
+      +'<button class="rpt-open" onclick="openRpanel(\''+href+'\',\''+title+'\')">보고서 보기'+arrowSvg+'</button>'
       +'<a class="rpt-dl" href="'+base+pdfSrc+'" download="'+dl+'" title="PDF 다운로드">'+dlSvg+'PDF</a>'
       +'</div></div>';
   }
@@ -664,6 +674,40 @@ render();
 positionPill();
 window.addEventListener("resize",positionPill,{passive:true});
 document.fonts.ready.then(positionPill);
+
+/* ===== 보고서 슬라이드 패널 ===== */
+var _rpFrame=null;
+function openRpanel(src,title){
+  var panel=document.getElementById('rpanel');
+  document.getElementById('rp-ttl').textContent=title;
+  if(!_rpFrame){_rpFrame=document.createElement('iframe');_rpFrame.title='보고서';panel.appendChild(_rpFrame);}
+  _rpFrame.src=src;
+  panel.classList.add('open');
+  panel.setAttribute('aria-hidden','false');
+  document.body.style.overflow='hidden';
+}
+function closeRpanel(){
+  var panel=document.getElementById('rpanel');
+  panel.classList.remove('open');
+  panel.setAttribute('aria-hidden','true');
+  document.body.style.overflow='';
+  setTimeout(function(){if(_rpFrame)_rpFrame.src='about:blank';},350);
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape')closeRpanel();
+});
 </script>
+
+<!-- 보고서 슬라이드 패널 -->
+<div id="rpanel" aria-hidden="true" aria-label="보고서 상세">
+  <div class="rp-hd">
+    <button class="rp-back" onclick="closeRpanel()" aria-label="닫기">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>
+      돌아가기
+    </button>
+    <span class="rp-ttl" id="rp-ttl"></span>
+  </div>
+</div>
+
 </body>
 </html>
