@@ -192,7 +192,11 @@ nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:trans
 .rp-back{background:none;border:none;display:flex;align-items:center;gap:5px;color:#aebbe2;font-size:13px;font-weight:600;cursor:pointer;padding:0;font-family:inherit;position:relative;}
 .rp-back svg{width:16px;height:16px;}
 .rp-ttl{font-size:14px;font-weight:700;color:#fff;position:relative;}
-#rpanel iframe{flex:1;border:none;width:100%;display:block;background:var(--bg);}
+#rp-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;background:var(--bg);}
+#rp-body canvas{display:block;width:100%!important;margin-bottom:2px;}
+#rp-spin{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:14px;color:var(--text-mute);font-size:13px;}
+.rp-spin-ring{width:36px;height:36px;border:3px solid var(--line);border-top-color:var(--navy);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── toast ──────────────────────── */
 #toast{position:fixed;left:50%;bottom:calc(var(--navh) + env(safe-area-inset-bottom,0px) + 10px);transform:translateX(-50%) translateY(8px);background:rgba(25,31,40,.92);color:#fff;font-size:12.5px;font-weight:600;padding:10px 16px;border-radius:10px;opacity:0;pointer-events:none;z-index:150;white-space:nowrap;transition:opacity .25s,transform .25s;}
@@ -225,6 +229,7 @@ nav button.on::after{content:'';position:absolute;top:0;left:50%;transform:trans
 }
 @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;transition-duration:.001s!important;}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 
@@ -598,10 +603,10 @@ function renderRaw(){
   return '<div class="sec" style="margin-top:6px;">원본 보고서</div>'
     +rptCard('01','재정보고 26년 1분기','기준일 26.03.01 · 9개 섹션',
       ['잔액현황','결산금 현황','자산현황','차용금','일반헌금','목적헌금','NGC 예배','적립금','외화현황'],
-      'docs.html#doc1','q1.pdf','재정보고서(26년 1분기).pdf')
+      'q1.pdf','q1.pdf','재정보고서(26년 1분기).pdf')
     +rptCard('02','재정보고 26년 2분기','기준일 26.06.01 · 재정현황',
       ['26년도 재정 현황'],
-      'docs.html#doc2','q2.pdf','재정현황(26년 2분기).pdf');
+      'q2.pdf','q2.pdf','재정현황(26년 2분기).pdf');
 }
 
 /* ===== 상태 / 라우팅 ===== */
@@ -675,23 +680,72 @@ positionPill();
 window.addEventListener("resize",positionPill,{passive:true});
 document.fonts.ready.then(positionPill);
 
-/* ===== 보고서 슬라이드 패널 ===== */
-var _rpFrame=null;
-function openRpanel(src,title){
+/* ===== 보고서 슬라이드 패널 (PDF.js) ===== */
+var _rpCurrentUrl=null;
+var _rpTask=null;
+var PDF_BASE='https://gerrardbak08.github.io/finance-meslap/';
+
+if(typeof pdfjsLib!=='undefined'){
+  pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+}
+
+function openRpanel(pdfFile,title){
   var panel=document.getElementById('rpanel');
   document.getElementById('rp-ttl').textContent=title;
-  if(!_rpFrame){_rpFrame=document.createElement('iframe');_rpFrame.title='보고서';panel.appendChild(_rpFrame);}
-  _rpFrame.src=src;
   panel.classList.add('open');
   panel.setAttribute('aria-hidden','false');
   document.body.style.overflow='hidden';
+  var url=PDF_BASE+pdfFile;
+  if(_rpCurrentUrl===url)return;
+  _rpCurrentUrl=url;
+  _loadPdf(url);
 }
+
+function _loadPdf(url){
+  var body=document.getElementById('rp-body');
+  body.innerHTML='<div id="rp-spin"><div class="rp-spin-ring"></div>PDF 불러오는 중…</div>';
+  if(_rpTask){try{_rpTask.destroy();}catch(e){}_rpTask=null;}
+  if(typeof pdfjsLib==='undefined'){
+    body.innerHTML='<div id="rp-spin">PDF.js 로드 실패</div>';
+    return;
+  }
+  _rpTask=pdfjsLib.getDocument({url:url,cMapUrl:'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/cmaps/',cMapPacked:true});
+  _rpTask.promise.then(function(pdf){
+    body.innerHTML='';
+    var W=body.offsetWidth||370;
+    var tasks=[];
+    for(var i=1;i<=pdf.numPages;i++){tasks.push(_renderPage(pdf,i,body,W));}
+    return Promise.all(tasks);
+  }).catch(function(){
+    body.innerHTML='<div id="rp-spin">PDF를 불러올 수 없습니다.</div>';
+  });
+}
+
+function _renderPage(pdf,num,container,W){
+  return pdf.getPage(num).then(function(page){
+    var vp=page.getViewport({scale:1});
+    var scale=(W/vp.width)*(window.devicePixelRatio||1);
+    var svp=page.getViewport({scale:scale});
+    var canvas=document.createElement('canvas');
+    canvas.width=svp.width;
+    canvas.height=svp.height;
+    canvas.style.width=W+'px';
+    canvas.style.height=(svp.height/scale*(1))+'px';
+    container.appendChild(canvas);
+    return page.render({canvasContext:canvas.getContext('2d'),viewport:svp}).promise;
+  });
+}
+
 function closeRpanel(){
   var panel=document.getElementById('rpanel');
   panel.classList.remove('open');
   panel.setAttribute('aria-hidden','true');
   document.body.style.overflow='';
-  setTimeout(function(){if(_rpFrame)_rpFrame.src='about:blank';},350);
+  _rpCurrentUrl=null;
+  setTimeout(function(){
+    if(_rpTask){try{_rpTask.destroy();}catch(e){}_rpTask=null;}
+    document.getElementById('rp-body').innerHTML='';
+  },350);
 }
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape')closeRpanel();
@@ -707,6 +761,7 @@ document.addEventListener('keydown',function(e){
     </button>
     <span class="rp-ttl" id="rp-ttl"></span>
   </div>
+  <div id="rp-body"></div>
 </div>
 
 </body>
