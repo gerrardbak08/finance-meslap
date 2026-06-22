@@ -1,0 +1,71 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2] [cursor=pointer]:
+    - generic [ref=e3]:
+      - generic [ref=e4]: 사랑과평안의교회
+      - generic [ref=e5]: 2026년
+      - heading "상반기 재정보고서" [level=2] [ref=e6]:
+        - text: 상반기
+        - text: 재정보고서
+      - generic [ref=e7]: 기준일 2026.06.01
+    - generic [ref=e10]: 화면을 터치하면 시작
+  - generic [ref=e11]:
+    - banner [ref=e12]:
+      - generic [ref=e13]: 사랑과평안의교회
+      - heading "2026년 상반기 재정보고서" [level=1] [ref=e14]
+      - generic [ref=e15]: 기준일 2026.06.01 · 상반기 누적
+      - generic [ref=e16]:
+        - button "상반기" [ref=e17] [cursor=pointer]
+        - button "1분기" [ref=e18] [cursor=pointer]
+        - button "2분기" [ref=e19] [cursor=pointer]
+    - generic [ref=e21]:
+      - generic [ref=e22]:
+        - generic [ref=e23]: 상반기 잔액 총계
+        - generic [ref=e24]: "-0.0억원"
+        - generic [ref=e25]: 151,793,323원
+        - generic [ref=e26]:
+          - generic [ref=e27]:
+            - generic [ref=e28]: 수입 총계
+            - generic [ref=e29]: "-0.0억"
+          - generic [ref=e30]:
+            - generic [ref=e31]: 지출 총계
+            - generic [ref=e32]: "-0.0억"
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - text: 지출 집행률
+            - generic [ref=e36]: 수입 총계 대비
+          - generic [ref=e37]: 53.8%
+        - generic [ref=e39]: 지출 176,692,578원 / 수입 328,485,901원
+      - generic [ref=e40]: 핵심 지표
+      - generic [ref=e41]:
+        - generic [ref=e42]:
+          - generic [ref=e43]: 신규 수입 (이월 제외)
+          - generic [ref=e44]:
+            - generic [ref=e45]: 2.1억원
+            - generic [ref=e46]: 이월금 36.9% 제외
+        - generic [ref=e47]:
+          - generic [ref=e48]: 전년도 이월금
+          - generic [ref=e49]:
+            - generic [ref=e50]: 1.2억원
+            - generic [ref=e51]: 상반기 이월 포함
+        - generic [ref=e52]:
+          - generic [ref=e53]: 결산 잔액
+          - generic [ref=e54]:
+            - generic [ref=e55]: 1.5억원
+            - generic [ref=e56]: 151,793,323원
+    - navigation [ref=e57]:
+      - button "개요" [ref=e58] [cursor=pointer]:
+        - img [ref=e59]
+        - text: 개요
+      - button "자산" [ref=e64] [cursor=pointer]:
+        - img [ref=e65]
+        - text: 자산
+      - button "헌금" [ref=e67] [cursor=pointer]:
+        - img [ref=e68]
+        - text: 헌금
+      - button "차용금" [ref=e71] [cursor=pointer]:
+        - img [ref=e72]
+        - text: 차용금
+      - button "원본" [ref=e74] [cursor=pointer]:
+        - img [ref=e75]
+        - text: 원본

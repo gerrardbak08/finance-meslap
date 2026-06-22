@@ -1,0 +1,72 @@
+- generic [ref=e2]:
+  - banner [ref=e3]:
+    - link "재정보고서로 돌아가기" [ref=e4] [cursor=pointer]:
+      - /url: index.html
+      - img [ref=e5]
+      - text: 재정보고서로 돌아가기
+    - generic [ref=e7]: 사랑과평안의교회
+    - heading "원본 자료" [level=1] [ref=e8]
+    - generic [ref=e9]: 2026년 1·2분기 원본 PDF 문서
+  - generic [ref=e10]:
+    - generic [ref=e11]: 1분기
+    - generic [ref=e12]:
+      - button "PDF 재정보고서 26년 1분기 · 55KB" [ref=e13] [cursor=pointer]:
+        - generic [ref=e14]:
+          - generic [ref=e15]: PDF
+          - generic [ref=e16]:
+            - generic [ref=e17]: 재정보고서
+            - generic [ref=e18]: 26년 1분기 · 55KB
+        - img [ref=e19]
+      - generic:
+        - iframe [ref=e22]:
+          
+        - generic [ref=e23]:
+          - link "새 탭에서 열기" [ref=e24] [cursor=pointer]:
+            - /url: q1.pdf
+            - img [ref=e25]
+            - text: 새 탭에서 열기
+          - link "다운로드" [ref=e29] [cursor=pointer]:
+            - /url: q1.pdf
+            - img [ref=e30]
+            - text: 다운로드
+    - generic [ref=e33]: 2분기
+    - generic [ref=e34]:
+      - button "PDF 재정현황 26년 2분기 · 19KB" [ref=e35] [cursor=pointer]:
+        - generic [ref=e36]:
+          - generic [ref=e37]: PDF
+          - generic [ref=e38]:
+            - generic [ref=e39]: 재정현황
+            - generic [ref=e40]: 26년 2분기 · 19KB
+        - img [ref=e41]
+      - generic:
+        - iframe [ref=e44]:
+          
+        - generic [ref=e45]:
+          - link "새 탭에서 열기" [ref=e46] [cursor=pointer]:
+            - /url: q2.pdf
+            - img [ref=e47]
+            - text: 새 탭에서 열기
+          - link "다운로드" [ref=e51] [cursor=pointer]:
+            - /url: q2.pdf
+            - img [ref=e52]
+            - text: 다운로드
+    - generic [ref=e55]:
+      - button "PDF 잔액보고 26년 2분기 · 49KB" [ref=e56] [cursor=pointer]:
+        - generic [ref=e57]:
+          - generic [ref=e58]: PDF
+          - generic [ref=e59]:
+            - generic [ref=e60]: 잔액보고
+            - generic [ref=e61]: 26년 2분기 · 49KB
+        - img [ref=e62]
+      - generic:
+        - iframe [ref=e65]:
+          
+        - generic [ref=e66]:
+          - link "새 탭에서 열기" [ref=e67] [cursor=pointer]:
+            - /url: q2-balance.pdf
+            - img [ref=e68]
+            - text: 새 탭에서 열기
+          - link "다운로드" [ref=e72] [cursor=pointer]:
+            - /url: q2-balance.pdf
+            - img [ref=e73]
+            - text: 다운로드

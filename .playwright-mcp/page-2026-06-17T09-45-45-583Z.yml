@@ -1,0 +1,65 @@
+- generic [ref=e1]:
+  - status: 2분기 단독 · 상반기 누적에서 1분기 제외 산출
+  - generic [ref=e11]:
+    - banner [ref=e12]:
+      - generic [ref=e13]: 사랑과평안의교회
+      - heading "2026년 2분기 재정보고서" [level=1] [ref=e80]
+      - generic [ref=e15]: 기준일 2026.06.01 · 2분기 단독
+      - tablist "분기 선택" [ref=e17]:
+        - tab "상반기" [ref=e18] [cursor=pointer]
+        - tab "1분기" [ref=e19] [cursor=pointer]
+        - tab "2분기" [active] [selected] [ref=e20] [cursor=pointer]: 2분기
+    - generic [ref=e22]:
+      - generic [ref=e82]:
+        - generic [ref=e83]:
+          - text: 2분기 잔액 총계
+          - generic [ref=e84]: 단독
+        - generic [ref=e85]: 1.4억원
+        - generic [ref=e86]: 151,793,323원
+        - generic [ref=e87]:
+          - generic [ref=e88]:
+            - generic [ref=e89]: 수입 총계
+            - generic [ref=e90]: 2.3억
+          - generic [ref=e91]:
+            - generic [ref=e92]: 지출 총계
+            - generic [ref=e93]: 0.7억
+      - generic [ref=e94]:
+        - generic [ref=e95]:
+          - generic [ref=e96]:
+            - text: 지출 집행률
+            - generic [ref=e97]: 수입 총계 대비
+          - generic [ref=e98]: 33.4%
+        - generic [ref=e101]: 지출 76,077,875원 / 수입 227,871,198원
+      - generic [ref=e102]: 핵심 지표
+      - generic [ref=e103]:
+        - generic [ref=e104]:
+          - generic [ref=e105]: 신규 수입 (이월 제외)
+          - generic [ref=e106]:
+            - generic [ref=e107]: 0.9억원
+            - generic [ref=e108]: 이월금 59.9% 제외
+        - generic [ref=e109]:
+          - generic [ref=e110]: 1분기 이월금
+          - generic [ref=e111]:
+            - generic [ref=e112]: 1.4억원
+            - generic [ref=e113]: 1분기 이월금 포함
+        - generic [ref=e114]:
+          - generic [ref=e115]: 결산 잔액
+          - generic [ref=e116]:
+            - generic [ref=e117]: 1.5억원
+            - generic [ref=e118]: 151,793,323원
+    - navigation [ref=e58]:
+      - button "개요" [ref=e59] [cursor=pointer]:
+        - img [ref=e60]
+        - text: 개요
+      - button "자산" [ref=e65] [cursor=pointer]:
+        - img [ref=e66]
+        - text: 자산
+      - button "헌금" [ref=e68] [cursor=pointer]:
+        - img [ref=e69]
+        - text: 헌금
+      - button "차용금" [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+        - text: 차용금
+      - button "원본" [ref=e75] [cursor=pointer]:
+        - img [ref=e76]
+        - text: 원본

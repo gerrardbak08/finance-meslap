@@ -1,0 +1,112 @@
+- generic [ref=e1]:
+  - status: 2분기 단독 · 상반기 누적에서 1분기 제외 산출
+  - generic [ref=e11]:
+    - banner [ref=e12]:
+      - generic [ref=e13]: 사랑과평안의교회
+      - heading "2026년 2분기 재정보고서" [level=1] [ref=e80]
+      - generic [ref=e15]: 기준일 2026.06.01 · 2분기 단독
+      - tablist "분기 선택" [ref=e17]:
+        - tab "상반기" [ref=e18] [cursor=pointer]
+        - tab "1분기" [ref=e19] [cursor=pointer]
+        - tab "2분기" [selected] [ref=e20] [cursor=pointer]
+    - generic [ref=e21]:
+      - generic [ref=e275]:
+        - generic [ref=e276]:
+          - img [ref=e277]
+          - generic [ref=e280]: 보고서에 별도 자산현황표가 없어 통장잔액만 결산으로 갱신하고 부동산·부채는 연간 고정값으로 표시했습니다. 합계는 산출값입니다.
+        - generic [ref=e281]:
+          - generic [ref=e282]: 26년 2분기 총자산
+          - generic [ref=e283]:
+            - generic [ref=e284]:
+              - text: 4,566,610,395
+              - generic [ref=e285]: 전년比 100.64%
+            - generic [ref=e286]: 전년도 4,537,758,720원
+        - generic [ref=e287]: 자산현황
+        - generic [ref=e288]:
+          - table [ref=e289]:
+            - rowgroup [ref=e290]:
+              - row "항목 전년도 평가액 26년 2분기말" [ref=e291]:
+                - columnheader "항목" [ref=e292]
+                - columnheader "전년도 평가액" [ref=e293]
+                - columnheader "26년 2분기말" [ref=e294]
+            - rowgroup [ref=e295]:
+              - row "부동산" [ref=e296]:
+                - cell "부동산" [ref=e297]
+              - row "교육관 4층 800,000,000 800,000,000" [ref=e298]:
+                - cell "교육관 4층" [ref=e299]
+                - cell "800,000,000" [ref=e300]
+                - cell "800,000,000" [ref=e301]
+              - row "본관 6,200,000,000 6,200,000,000" [ref=e302]:
+                - cell "본관" [ref=e303]
+                - cell "6,200,000,000" [ref=e304]
+                - cell "6,200,000,000" [ref=e305]
+              - row "동산" [ref=e306]:
+                - cell "동산" [ref=e307]
+              - row "사무용품·음향기기 16,463,413 14,817,072" [ref=e308]:
+                - cell "사무용품·음향기기" [ref=e309]
+                - cell "16,463,413" [ref=e310]
+                - cell "14,817,072" [ref=e311]
+              - row "일반통장 잔액 117,367,230 146,813,856" [ref=e312]:
+                - cell "일반통장 잔액" [ref=e313]
+                - cell "117,367,230" [ref=e314]
+                - cell "146,813,856" [ref=e315]
+              - row "NGC예배 잔액 1,587,890 2,639,280" [ref=e316]:
+                - cell "NGC예배 잔액" [ref=e317]
+                - cell "1,587,890" [ref=e318]
+                - cell "2,639,280" [ref=e319]
+              - row "특별적립금 잔액 2,340,187 2,340,187" [ref=e320]:
+                - cell "특별적립금 잔액" [ref=e321]
+                - cell "2,340,187" [ref=e322]
+                - cell "2,340,187" [ref=e323]
+              - row "부채" [ref=e324]:
+                - cell "부채" [ref=e325]
+              - row "농협 대출 -2,600,000,000 -2,600,000,000" [ref=e326]:
+                - cell "농협 대출" [ref=e327]
+                - cell "-2,600,000,000" [ref=e328]
+                - cell "-2,600,000,000" [ref=e329]
+              - row "합계 4,537,758,720 4,566,610,395" [ref=e330]:
+                - cell "합계" [ref=e331]
+                - cell "4,537,758,720" [ref=e332]
+                - cell "4,566,610,395" [ref=e333]
+          - generic [ref=e334]: 통장잔액은 2분기말 기준 · 부동산·부채·사무용품은 연간 고정 · 합계는 산출값
+        - generic [ref=e335]: 외화현황 (1분기 기준)
+        - generic [ref=e336]:
+          - table [ref=e337]:
+            - rowgroup [ref=e338]:
+              - row "통화 / 항목 결산" [ref=e339]:
+                - columnheader "통화 / 항목" [ref=e340]
+                - columnheader "결산" [ref=e341]
+            - rowgroup [ref=e342]:
+              - row "미국달러 (USD) $1,338" [ref=e343]:
+                - cell "미국달러 (USD)" [ref=e344]
+                - cell "$1,338" [ref=e345]
+              - row "ㄴ 일반헌금 $400" [ref=e346]:
+                - cell "ㄴ 일반헌금" [ref=e347]
+                - cell "$400" [ref=e348]
+              - row "ㄴ 카렌장학금 $838" [ref=e349]:
+                - cell "ㄴ 카렌장학금" [ref=e350]
+                - cell "$838" [ref=e351]
+              - row "ㄴ 담임목사사역비 $100" [ref=e352]:
+                - cell "ㄴ 담임목사사역비" [ref=e353]
+                - cell "$100" [ref=e354]
+              - row "태국바트 (THB) ฿20,493" [ref=e355]:
+                - cell "태국바트 (THB)" [ref=e356]
+                - cell "฿20,493" [ref=e357]
+          - generic [ref=e358]: "태국바트: 일반헌금·선교출판·카렌장학"
+      - text: ㄴ ㄴ ㄴ
+    - navigation [ref=e58]:
+      - button "개요" [ref=e59] [cursor=pointer]:
+        - img [ref=e60]
+        - text: 개요
+      - button "자산" [active] [ref=e65] [cursor=pointer]:
+        - img [ref=e66]
+        - text: 자산
+      - button "헌금" [ref=e68] [cursor=pointer]:
+        - img [ref=e69]
+        - text: 헌금
+      - button "차용금" [ref=e72] [cursor=pointer]:
+        - img [ref=e73]
+        - text: 차용금
+      - button "원본" [ref=e75] [cursor=pointer]:
+        - img [ref=e76]
+        - text: 원본
