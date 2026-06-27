@@ -670,7 +670,7 @@ function _renderPage(pdf,num,container,W){
     canvas.width=svp.width;
     canvas.height=svp.height;
     canvas.style.width=W+'px';
-    canvas.style.height=(svp.height/scale*(1))+'px';
+    canvas.style.height=Math.round(W*vp.height/vp.width)+'px';
     container.appendChild(canvas);
     return page.render({canvasContext:canvas.getContext('2d'),viewport:svp}).promise;
   });
